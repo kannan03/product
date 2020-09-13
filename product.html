@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<style>
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  border: 1px solid #ddd;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f5e1e1}
+</style>
+</head>
+<body>
+
+    <form action="/productsearch" method="POST">
+       Filter : <select name="search" id="search">
+            <option value="recent" > Recents</option>
+            <option value="uname"> username</option>
+            <option value="cname"> category</option>
+            <option value="tproduct"> Project Title</option>
+        </select> <br> <br>
+      <input type="submit" id="searchform" value="search">
+    </form>
+
+<h2>Product  Table</h2>
+<div style="overflow-x:auto;">
+  <table id="tableData" >
+    <tr>
+      <th>Title Name</th>
+      <th>User Name</th>
+      <th>category Name</th>
+    </tr>
+  </table>
+</div>
+
+<script>
+
+  $(document).ready(function(){
+    $.ajax({
+      url: "http://localhost:5555/productData?search=recent"  ,   //url set
+      type: "GET",
+      dataType : "json",
+      success: function(data, textStatus, jqXHR){
+             $(data.products).each(function(index,value){
+              var records =  "<tr><td>" + value.project_title + "</td>" ;
+              records +=  "<td>" + value.username + "</td>" ;
+              records +=  "<td>" + value.category_name + "</td></tr>" ;
+              $("table").append(records);
+             });
+      },
+      error: function(jqXHR, textStatus, errorThrown){
+        alert("error send data" + errorThrown);     //error server
+      }
+      });     
+      
+      // click event 
+      $("#searchform").click(function(e){
+        var Item = document.getElementById("search");
+        var selectItem = document.getElementById("search").options[Item.selectedIndex].value;
+        e.preventDefault();          //browser event stop
+
+        $.ajax({
+      url: "http://localhost:5555/productData?search=" +selectItem  ,   //url set
+      type: "GET",
+      dataType : "json",
+      success: function(data, textStatus, jqXHR){
+            var  gallery =$("#tableData");
+            gallery.find("td").remove();
+             $(data.products).each(function(index,value){
+              var records =  "<tr><td>" + value.project_title + "</td>" ;
+              records +=  "<td>" + value.username + "</td>" ;
+              records +=  "<td>" + value.category_name + "</td></tr>" ;
+              $("table").append(records);
+             });
+      },
+      error: function(jqXHR, textStatus, errorThrown){
+        alert("error send data" + errorThrown);     //error server
+      }
+      });     
+
+
+      });
+      
+   });
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+     // jquery ajax post method declare 
+
+     $(document).ready(function(){
+        $("#userform").click(function(e){
+         e.preventDefault();          //browser event stop
+         var Email = $("#email").val();
+         var Pass = $("#password").val();
+         var ObjData = { email:Email, password:Pass };
+
+        $.ajax({
+        url: "http://localhost:5555/login",   //url set
+        type: "POST",
+        data:  ObjData,   //form data 
+        success: function(data, textStatus, jqXHR){
+              alert(data.status);                      //return result value set data  variable 
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+          alert("error send data" + errorThrown);     //error server
+        }
+        });
+        });
+       });
+
+</script>
+</head>
+<body>
+
+<form  align="center" action="/login" method="post">
+  Email: &nbsp; <input type="text" name="email" id="email"><br><br>
+  Password: <input type="text" name="password" id="password"><br><br>
+  <input type="submit" value="Submit" id="userform">
+</form> 
+
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Login Form Tutorial</title>
+		<style>
+		.login-form {
+			width: 300px;
+			margin: 0 auto;
+			font-family: Tahoma, Geneva, sans-serif;
+		}
+		.login-form h1 {
+			text-align: center;
+			color: #4d4d4d;
+			font-size: 24px;
+			padding: 20px 0 20px 0;
+		}
+		.login-form input[type="password"],
+		.login-form input[type="text"] {
+			width: 100%;
+			padding: 15px;
+			border: 1px solid #dddddd;
+			margin-bottom: 15px;
+			box-sizing:border-box;
+		}
+		.login-form input[type="submit"] {
+			width: 100%;
+			padding: 15px;
+			background-color: #535b63;
+			border: 0;
+			box-sizing: border-box;
+			cursor: pointer;
+			font-weight: bold;
+			color: #ffffff;
+		}
+    </style>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+
+     // jquery ajax post method declare 
+
+     $(document).ready(function(){
+        $("#userform").click(function(e){
+         e.preventDefault();          //browser event stop
+         var User = $("#username").val();
+         var Pass = $("#password").val();
+         var ObjData = { username:User, password:Pass };
+//  user & pass empty
+         if(User == "" && Pass == "") {
+          document.getElementById("errorMsg").innerHTML = "password & username required" ;
+          setTimeout (function(){
+            document.getElementById("errorMsg").innerHTML = "" ;
+          },3000); 
+         }
+// user only empty
+         if(User == "" && Pass != "") {
+          document.getElementById("errorMsg").innerHTML = "username required" ;
+          setTimeout (function(){
+            document.getElementById("errorMsg").innerHTML = "" ;
+          },3000); 
+
+        }
+        // pass only empty
+        if(User != "" && Pass == "") {
+          setTimeout (function(){
+            document.getElementById("errorMsg").innerHTML = "" ;
+          },3000); 
+          document.getElementById("errorMsg").innerHTML = "password required" ;
+
+        }
+
+         if(User != "" && Pass != "") {
+          $.ajax({
+        url: "http://localhost:5555/login",   //url set
+        type: "POST",
+        data:  ObjData,   //form data 
+        success: function(data, textStatus, jqXHR){
+          if(data.message == "true") {
+                window.location.href = "http://localhost:5555/product" ;
+          }
+          else{
+                alert(data.message);
+          }
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+          alert("error send data" + errorThrown);     //error server
+        }
+        });              
+         }
+        
+        });
+       });
+
+</script>
+
+	</head>
+	<body>
+		<div class="login-form">
+      <h1>Login Form</h1>
+      <p id="errorMsg"> </p>
+			<form action="/login" method="POST">
+				<input type="text" name="username"  id="username" placeholder="Username" >
+				<input type="password" name="password" id= "password" placeholder="Password" >
+				<input type="submit" id="userform">
+			</form>
+    </div>
+  
+	</body>
+</html>
